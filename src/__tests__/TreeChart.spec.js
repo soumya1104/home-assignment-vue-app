@@ -1,28 +1,42 @@
 import { shallowMount } from '@vue/test-utils';
 import TreeChart from '@/components/TreeChart.vue';
+import api from '../services/api';
+import { nextTick } from 'vue';
+
+jest.mock('../services/api');
 
 describe('TreeChart.vue', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallowMount(TreeChart, {
+    methods: {
+      fetchData: jest.fn() //Mock fetchData method to prevent it from running in created hook
+    }
+  });
+});
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders correctly', () => {
-    const wrapper = shallowMount(TreeChart);
     expect(wrapper.exists()).toBe(true);
   });
 
-  // it('fetches data on mount', async () => {
-  //   const mockData = [
-  //     { parent: '', name: 'A', description: 'Description of A' },
-  //     { parent: 'A', name: 'B', description: 'Description of B' }
-  //   ];
-  //   global.fetch = jest.fn(() =>
-  //     Promise.resolve({
-  //       json: () => Promise.resolve(mockData)
-  //     })
-  //   );
+  it('fetches data on mount', async () => {
+    const mockData = [
+      { parent: '', name: 'A', description: 'Description of A' },
+      { parent: 'A', name: 'B', description: 'Description of B' }
+    ];
+    api.getData.mockResolvedValue({data: mockData});
+    
+    await wrapper.vm.fetchData();
+    await nextTick();
 
-  //   const wrapper = shallowMount(TreeChart);
-  //   await wrapper.vm.$nextTick(); // Wait for next DOM update cycle
-
-  //   expect(wrapper.vm.data).toEqual(mockData);
-  // });
+    expect(api.getData).toHaveBeenCalled();
+    expect(wrapper.vm.data).toEqual(mockData);
+  });
 
   it('shows description block on node click', async () => {
     const wrapper = shallowMount(TreeChart);

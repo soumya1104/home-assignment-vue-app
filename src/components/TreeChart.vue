@@ -20,10 +20,12 @@
     },
     async mounted() {
       await this.fetchData();
-      this.createTreeGraph();
+      if(this.data) {
+        this.createTreeGraph();
+      }      
     },
     methods: {
-        showDescription(node) {
+    showDescription(node) {
     this.selectedNode = node;
   },
   hideDescription() {
