@@ -9,6 +9,7 @@
   
   <script>
   import * as d3 from 'd3';
+  import api from '../services/api';
   
   export default {
     data() {
@@ -30,13 +31,15 @@
 },
       async fetchData() {
         try {
-          const response = await fetch('http://localhost:3000/data');
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          this.data = await response.json();
+          const response = await api.getData();
+          this.data = response.data.map(record => record._fields[0].properties);
+          // const response = await fetch('http://localhost:3000/data');
+          // if (!response.ok) {
+          //   throw new Error('Network response was not ok');
+          // }
+          // this.data = await response.json();
         } catch (error) {
-          console.error('Fetch error:', error);
+          console.error('Error fetching data:', error);
         }
       },
       createTreeGraph() {
