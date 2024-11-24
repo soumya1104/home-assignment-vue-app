@@ -32,7 +32,7 @@
       async fetchData() {
         try {
           const response = await api.getData();
-          this.data = response.data.map(record => record._fields[0].properties);
+          this.data = response?.data?.map(record => record._fields[0].properties);
           // const response = await fetch('http://localhost:3000/data');
           // if (!response.ok) {
           //   throw new Error('Network response was not ok');
