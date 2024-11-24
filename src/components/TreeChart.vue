@@ -125,7 +125,7 @@
   }
   .sidebar {
     position: absolute;
-    top: 20px;
+    top: 100px;
     right: 20px;
     background: white;
     border: 1px solid #ccc;
